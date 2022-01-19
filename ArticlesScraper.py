@@ -34,6 +34,7 @@ class ScrapingBrowser:
 
 
 def articles_summary(lst, browser):
+    df = pd.DataFrame()
     for pack in lst:
         browser.driver.get("https://smmry.com/")
         while True:
@@ -42,7 +43,18 @@ def articles_summary(lst, browser):
                 break
             except ElementNotInteractableException:
                 pass
+        browser.driver.find_element_by_xpath('//input[contains(@id, "sm_submit")]').click()
+        sleep(5)
+        while True:
+            try:
+                text = browser.driver.find_element_by_xpath('//div[contains(@id, "sm_secondary_inner_interface")]').text
+                break
+            except NoSuchElementException:
+                pass
 
+        dict_with_data = {"ArticleName":pack[1], "Summary":text, "Link":pack[0]}
+        df = df.append(pd.DataFrame(dict_with_data, index=[0]))
+    print(df["Summary"])
 
 
 def main(art_addr):
