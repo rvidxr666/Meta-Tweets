@@ -54,11 +54,10 @@ def articles_summary(lst, browser):
 
         dict_with_data = {"ArticleName":pack[1], "Summary":text, "Link":pack[0]}
         df = df.append(pd.DataFrame(dict_with_data, index=[0]))
-    print(df["Summary"])
+    return df
 
 
 def main(art_addr):
-    df = pd.DataFrame()
     browser = ScrapingBrowser(art_addr)
 
     while True:
@@ -70,9 +69,10 @@ def main(art_addr):
         lst_of_articles = [link.text for link in browser.driver
             .find_elements_by_xpath('//h3[contains(@class, "LC20lb MBeuO DKV0Md")]')]
         lst_of_lsts = [list(x) for x in zip(lst_of_links, lst_of_articles)]
-        articles_summary(lst_of_lsts, browser)
+        df = articles_summary(lst_of_lsts, browser)
+        print(df)
+        df.to_csv("data.csv", mode="a", header=False)
         browser.driver.get(current_link)
-        # print(len(lst_of_lsts), lst_of_lsts)
 
         try:
             link = browser.driver.find_element_by_xpath('//a[contains(@id, "pnnext")]').get_attribute("href")
