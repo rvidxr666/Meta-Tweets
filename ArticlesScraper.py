@@ -36,6 +36,8 @@ class ScrapingBrowser:
 def articles_summary(lst, browser):
     df = pd.DataFrame()
     for pack in lst:
+        if ".pl" in pack[0]:
+            continue
         browser.driver.get("https://smmry.com/")
         while True:
             try:
@@ -71,7 +73,7 @@ def main(art_addr):
         lst_of_lsts = [list(x) for x in zip(lst_of_links, lst_of_articles)]
         df = articles_summary(lst_of_lsts, browser)
         print(df)
-        df.to_csv("data.csv", mode="a", header=False)
+        df.to_csv("new_data.csv", mode="a", header=False)
         browser.driver.get(current_link)
 
         try:
@@ -85,4 +87,4 @@ def main(art_addr):
 
 if __name__ == "__main__":
     main(
-        "https://www.google.com/search?q=facebook+meta+opinion&sxsrf=AOaemvIdShQ0o70xHFfLO1BMdEFeLAar3Q%3A1642626722115&ei=on7oYf6wBvKFrwT15bDoCg&oq=facebook+meta+opinion&gs_lcp=Cgdnd3Mtd2l6EAEYADIFCAAQgAQ6BwgjEOoCECc6BAgjECc6CgguEMcBENEDEEM6BQguEJECOgsILhCABBDHARDRAzoFCC4QgAQ6BAgAEEM6CwguEIAEEMcBEK8BOgUIABCRAjoKCAAQgAQQhwIQFDoHCAAQgAQQCjoFCAAQywE6CAgAEBYQChAeOgYIABAWEB46CQgAEMkDEBYQHkoFCDwSATVKBAhBGABKBAhGGABQAFifNWDBPGgGcAB4AIABdYgB9A2SAQQyMC4ymAEAoAEBsAEKwAEB&sclient=gws-wiz")
+        "https://www.google.com/search?q=why+facebook+name+change&sxsrf=AOaemvI9yx_x3gtQU-giRS-E62rX_gJPyQ:1642776951991&ei=d8nqYerpO8ylptQPqp220As&start=0&sa=N&ved=2ahUKEwiqgayFjcP1AhXMkokEHaqODbo4ChDy0wN6BAgBEDw&biw=750&bih=738&dpr=1.25")
